@@ -8,7 +8,9 @@ import (
 
 // https://github.com/opencontainers/runtime-spec/blob/main/config.md
 type Config struct {
-	Linux Linux `json:"linux"`
+	Hostname   *string `json:"hostname"`
+	Domainname *string `json:"domainname"`
+	Linux      Linux   `json:"linux"`
 }
 
 // https://github.com/opencontainers/runtime-spec/blob/main/config-linux.md
