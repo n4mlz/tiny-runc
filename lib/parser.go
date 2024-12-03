@@ -42,7 +42,5 @@ func ParseConfig(path string) Config {
 		log.Fatalf("failed to decode file: %v", err)
 	}
 
-	log.Printf("config: %+v", config)
-
 	return config
 }
