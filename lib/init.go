@@ -2,6 +2,8 @@ package lib
 
 import (
 	"log"
+	"os"
+	"os/exec"
 )
 
 func Init() {
@@ -23,4 +25,14 @@ func Init() {
 	// TODO: implement
 
 	log.Printf("init")
+
+	// run shell
+	cmd := exec.Command("bash")
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	if err := cmd.Run(); err != nil {
+		log.Fatalf("failed to run shell: %v", err)
+	}
 }
