@@ -21,7 +21,7 @@ func Create() {
 	}
 	defer CleanupPipes(pipeToChild, pipeFromChild)
 
-	cmd := exec.Command("/proc/self/exe", "child", pipeFromChild, pipeToChild)
+	cmd := exec.Command("/proc/self/exe", "init", "1", pipeToChild, pipeFromChild)
 
 	var cloneFlags uintptr
 	for _, ns := range c.Linux.Namespaces {

@@ -7,12 +7,9 @@ import (
 	"syscall"
 )
 
-func Child() {
+func Init_1(pipeFromParent string, pipeToParent string) {
 	// TODO: get path from args according to OCI Runtime Specification
 	c := ParseConfig("bundle/config.json")
-
-	pipeToParent := os.Args[2]
-	pipeFromParent := os.Args[3]
 
 	handler, err := OpenPipesB(pipeFromParent, pipeToParent)
 	if err != nil {
@@ -36,7 +33,7 @@ func Child() {
 	syscall.Setuid(0)
 	syscall.Setgid(0)
 
-	cmd := exec.Command("/proc/self/exe", "init")
+	cmd := exec.Command("/proc/self/exe", "init", "2")
 
 	var cloneFlags uintptr
 	for _, ns := range c.Linux.Namespaces {

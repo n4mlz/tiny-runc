@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/n4mlz/tiny-runc/lib"
 	"github.com/spf13/cobra"
@@ -18,9 +19,21 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) == 0 {
+			fmt.Println("Invalid number of arguments")
+			os.Exit(1)
+		}
+
 		fmt.Println("init called")
 
-		lib.Init()
+		if args[0] == "1" {
+			lib.Init_1(args[1], args[2])
+		} else if args[0] == "2" {
+			lib.Init_2()
+		} else {
+			fmt.Println("Invalid argument")
+			os.Exit(1)
+		}
 	},
 }
 
