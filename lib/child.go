@@ -33,6 +33,9 @@ func Child() {
 		panic("parent not done")
 	}
 
+	syscall.Setuid(0)
+	syscall.Setgid(0)
+
 	cmd := exec.Command("/proc/self/exe", "init")
 
 	var cloneFlags uintptr
