@@ -7,7 +7,7 @@ import (
 	"syscall"
 )
 
-func Create() {
+func Create(containerID string) {
 	// TODO: get path from args according to OCI Runtime Specification
 	c := ParseConfig("bundle/config.json")
 
@@ -21,7 +21,7 @@ func Create() {
 	}
 	defer CleanupPipes(pipeToChild, pipeFromChild)
 
-	cmd := exec.Command("/proc/self/exe", "init", "1", pipeToChild, pipeFromChild)
+	cmd := exec.Command("/proc/self/exe", "init", "1", containerID, pipeToChild, pipeFromChild)
 
 	var cloneFlags uintptr
 	for _, ns := range c.Linux.Namespaces {

@@ -7,11 +7,11 @@ import (
 	"syscall"
 )
 
-func Init_2() {
+func Init_2(containerID string) {
 	// TODO: get path from args according to OCI Runtime Specification
 	c := ParseConfig("bundle/config.json")
 
-	cmd := exec.Command("/proc/self/exe", "init", "3")
+	cmd := exec.Command("/proc/self/exe", "init", "3", containerID)
 
 	var cloneFlags uintptr
 	for _, ns := range c.Linux.Namespaces {

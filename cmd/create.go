@@ -15,9 +15,9 @@ filesystem.`,
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 
-		// containerID := args[0]
+		containerID := args[0]
 
-		lib.Create()
+		lib.Create(containerID)
 	},
 }
 

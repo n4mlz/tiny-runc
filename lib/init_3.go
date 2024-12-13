@@ -6,7 +6,7 @@ import (
 	"os/exec"
 )
 
-func Init_3() {
+func Init_3(containerID string) {
 	// TODO: get path from args according to OCI Runtime Specification
 	c := ParseConfig("bundle/config.json")
 

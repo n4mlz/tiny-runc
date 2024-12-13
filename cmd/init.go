@@ -17,14 +17,16 @@ var initCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		fmt.Println("init called")
+		containerID := args[1]
 
 		if args[0] == "1" {
-			lib.Init_1(args[1], args[2])
+			pipeFromParent := args[2]
+			pipeToParent := args[3]
+			lib.Init_1(containerID, pipeFromParent, pipeToParent)
 		} else if args[0] == "2" {
-			lib.Init_2()
+			lib.Init_2(containerID)
 		} else if args[0] == "3" {
-			lib.Init_3()
+			lib.Init_3(containerID)
 		} else {
 			fmt.Println("Invalid argument")
 			os.Exit(1)
