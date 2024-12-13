@@ -30,6 +30,8 @@ to quickly create a Cobra application.`,
 			lib.Init_1(args[1], args[2])
 		} else if args[0] == "2" {
 			lib.Init_2()
+		} else if args[0] == "3" {
+			lib.Init_3()
 		} else {
 			fmt.Println("Invalid argument")
 			os.Exit(1)

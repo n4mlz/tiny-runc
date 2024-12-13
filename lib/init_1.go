@@ -9,7 +9,7 @@ import (
 
 func Init_1(pipeFromParent string, pipeToParent string) {
 	// TODO: get path from args according to OCI Runtime Specification
-	c := ParseConfig("bundle/config.json")
+	// c := ParseConfig("bundle/config.json")
 
 	handler, err := OpenPipesB(pipeFromParent, pipeToParent)
 	if err != nil {
@@ -34,17 +34,6 @@ func Init_1(pipeFromParent string, pipeToParent string) {
 	syscall.Setgid(0)
 
 	cmd := exec.Command("/proc/self/exe", "init", "2")
-
-	var cloneFlags uintptr
-	for _, ns := range c.Linux.Namespaces {
-		if ns.Type == "uts" {
-			cloneFlags |= syscall.CLONE_NEWUTS
-		}
-	}
-
-	cmd.SysProcAttr = &syscall.SysProcAttr{
-		Cloneflags: cloneFlags,
-	}
 
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
