@@ -7,9 +7,12 @@ import (
 	"syscall"
 )
 
-func Init_1(containerID, pipeFromParent string, pipeToParent string) {
-	// TODO: get path from args according to OCI Runtime Specification
-	// c := ParseConfig("bundle/config.json")
+func Init_1(containerID, bundlePath string, pipeFromParent string, pipeToParent string) {
+	if bundlePath == "" {
+		bundlePath = "."
+	}
+
+	// c := ParseConfig(filepath.Join(bundlePath, "config.json"))
 
 	handler, err := OpenPipesB(pipeFromParent, pipeToParent)
 	if err != nil {
@@ -33,7 +36,7 @@ func Init_1(containerID, pipeFromParent string, pipeToParent string) {
 	syscall.Setuid(0)
 	syscall.Setgid(0)
 
-	cmd := exec.Command("/proc/self/exe", "init", "2", containerID)
+	cmd := exec.Command("/proc/self/exe", "init", "2", containerID, "--bundle", bundlePath)
 
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout

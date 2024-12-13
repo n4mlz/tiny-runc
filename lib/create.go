@@ -4,12 +4,16 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"syscall"
 )
 
-func Create(containerID string) {
-	// TODO: get path from args according to OCI Runtime Specification
-	c := ParseConfig("bundle/config.json")
+func Create(containerID string, bundlePath string) {
+	if bundlePath == "" {
+		bundlePath = "."
+	}
+
+	c := ParseConfig(filepath.Join(bundlePath, "config.json"))
 
 	// TODO: properly manage pipe path
 	pipeToChild := "tmp/parent_to_child"
@@ -21,7 +25,7 @@ func Create(containerID string) {
 	}
 	defer CleanupPipes(pipeToChild, pipeFromChild)
 
-	cmd := exec.Command("/proc/self/exe", "init", "1", containerID, pipeToChild, pipeFromChild)
+	cmd := exec.Command("/proc/self/exe", "init", "1", containerID, pipeToChild, pipeFromChild, "--bundle", bundlePath)
 
 	var cloneFlags uintptr
 	for _, ns := range c.Linux.Namespaces {

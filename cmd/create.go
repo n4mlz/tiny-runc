@@ -5,7 +5,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// createCmd represents the create command
 var createCmd = &cobra.Command{
 	Use:   "create <container-id>",
 	Short: "create a container",
@@ -16,8 +15,12 @@ filesystem.`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		containerID := args[0]
+		bundle, err := cmd.Flags().GetString("bundle")
+		if err != nil {
+			panic(err)
+		}
 
-		lib.Create(containerID)
+		lib.Create(containerID, bundle)
 	},
 }
 

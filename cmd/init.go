@@ -18,15 +18,19 @@ var initCmd = &cobra.Command{
 		}
 
 		containerID := args[1]
+		bundle, err := cmd.Flags().GetString("bundle")
+		if err != nil {
+			panic(err)
+		}
 
 		if args[0] == "1" {
 			pipeFromParent := args[2]
 			pipeToParent := args[3]
-			lib.Init_1(containerID, pipeFromParent, pipeToParent)
+			lib.Init_1(containerID, bundle, pipeFromParent, pipeToParent)
 		} else if args[0] == "2" {
-			lib.Init_2(containerID)
+			lib.Init_2(containerID, bundle)
 		} else if args[0] == "3" {
-			lib.Init_3(containerID)
+			lib.Init_3(containerID, bundle)
 		} else {
 			fmt.Println("Invalid argument")
 			os.Exit(1)
@@ -36,4 +40,6 @@ var initCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(initCmd)
+
+	initCmd.Flags().StringP("bundle", "b", "", "path to the root of the bundle directory, defaults to the current directory")
 }

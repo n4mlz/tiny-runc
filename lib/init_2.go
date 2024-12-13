@@ -4,14 +4,18 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"syscall"
 )
 
-func Init_2(containerID string) {
-	// TODO: get path from args according to OCI Runtime Specification
-	c := ParseConfig("bundle/config.json")
+func Init_2(containerID string, bundlePath string) {
+	if bundlePath == "" {
+		bundlePath = "."
+	}
 
-	cmd := exec.Command("/proc/self/exe", "init", "3", containerID)
+	c := ParseConfig(filepath.Join(bundlePath, "config.json"))
+
+	cmd := exec.Command("/proc/self/exe", "init", "3", containerID, "--bundle", bundlePath)
 
 	var cloneFlags uintptr
 	for _, ns := range c.Linux.Namespaces {

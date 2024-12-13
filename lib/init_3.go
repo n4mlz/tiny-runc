@@ -4,11 +4,15 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
 )
 
-func Init_3(containerID string) {
-	// TODO: get path from args according to OCI Runtime Specification
-	c := ParseConfig("bundle/config.json")
+func Init_3(containerID string, bundlePath string) {
+	if bundlePath == "" {
+		bundlePath = "."
+	}
+
+	c := ParseConfig(filepath.Join(bundlePath, "config.json"))
 
 	for _, ns := range c.Linux.Namespaces {
 		if ns.Type == "uts" {
