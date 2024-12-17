@@ -19,7 +19,14 @@ func Init_3(containerID string) {
 		log.Fatalf("failed to parse config: %v", err)
 	}
 
-	Uts(config)
+	for _, ns := range config.Linux.Namespaces {
+		if ns.Type == "mount" {
+			Mount(container, config)
+		}
+		if ns.Type == "uts" {
+			Uts(config)
+		}
+	}
 
 	cmd := exec.Command(config.Process.Args[0], config.Process.Args[1:]...)
 
@@ -28,12 +35,9 @@ func Init_3(containerID string) {
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	cmd.SysProcAttr = &syscall.SysProcAttr{
-		Credential: &syscall.Credential{
-			Uid: config.Process.User.UID,
-			Gid: config.Process.User.GID,
-		},
-	}
+
+	syscall.Setuid(int(config.Process.User.UID))
+	syscall.Setgid(int(config.Process.User.GID))
 
 	// TODO: wait for start signal
 	if err := cmd.Run(); err != nil {
