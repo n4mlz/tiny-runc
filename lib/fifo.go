@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"path/filepath"
 	"syscall"
 )
 
@@ -12,6 +13,14 @@ func SetupPipes(pipePaths ...string) error {
 		if err := os.Remove(path); err != nil && !os.IsNotExist(err) {
 			return fmt.Errorf("error removing existing pipe: %v", err)
 		}
+
+		if _, err := os.Stat(path); os.IsNotExist(err) {
+			dir := filepath.Dir(path)
+			if err := os.MkdirAll(dir, 0755); err != nil {
+				return fmt.Errorf("failed to create directory: %w", err)
+			}
+		}
+
 		if err := syscall.Mkfifo(path, 0666); err != nil {
 			return fmt.Errorf("error creating pipe: %v", err)
 		}

@@ -26,8 +26,9 @@ func Create(containerID string, bundlePath string) {
 	}
 
 	// TODO: properly manage pipe path
-	pipeToChild := "tmp/parent_to_child"
-	pipeFromChild := "tmp/child_to_parent"
+	pipePath := filepath.Join(container.Root, "pipe")
+	pipeToChild := filepath.Join(pipePath, "parentToChild")
+	pipeFromChild := filepath.Join(pipePath, "childToParent")
 
 	if err := SetupPipes(pipeToChild, pipeFromChild); err != nil {
 		fmt.Println("Error setting up pipes:", err)
