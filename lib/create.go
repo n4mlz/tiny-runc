@@ -70,19 +70,21 @@ func Create(containerID string, bundlePath string) {
 		panic("child not ready")
 	}
 
-	// TODO: newuidmap, newgidmap
-	// TODO: read from config
-	uidMapPath := fmt.Sprintf("/proc/%d/uid_map", cmd.Process.Pid)
-	gidSetGroupPath := fmt.Sprintf("/proc/%d/setgroups", cmd.Process.Pid)
-	gidMapPath := fmt.Sprintf("/proc/%d/gid_map", cmd.Process.Pid)
+	uidMappingArgs := []string{fmt.Sprint(cmd.Process.Pid)}
+	for _, mapping := range config.Linux.UIDMappings {
+		uidMappingArgs = append(uidMappingArgs, fmt.Sprint(mapping.ContainerID), fmt.Sprint(mapping.HostID), fmt.Sprint(mapping.Size))
+	}
 
-	if err := os.WriteFile(uidMapPath, []byte("0 1000 1"), 0600); err != nil {
+	gidMappingArgs := []string{fmt.Sprint(cmd.Process.Pid)}
+	for _, mapping := range config.Linux.GIDMappings {
+		gidMappingArgs = append(gidMappingArgs, fmt.Sprint(mapping.ContainerID), fmt.Sprint(mapping.HostID), fmt.Sprint(mapping.Size))
+	}
+
+	if err := exec.Command("newuidmap", uidMappingArgs...).Run(); err != nil {
 		panic(err)
 	}
-	if err := os.WriteFile(gidSetGroupPath, []byte("deny"), 0600); err != nil {
-		panic(err)
-	}
-	if err := os.WriteFile(gidMapPath, []byte("0 1000 1"), 0600); err != nil {
+
+	if err := exec.Command("newgidmap", gidMappingArgs...).Run(); err != nil {
 		panic(err)
 	}
 
