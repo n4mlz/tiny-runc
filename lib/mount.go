@@ -15,6 +15,7 @@ func mount_fs(container Container, config specs.Spec) {
 		data := ""
 		if m.Options != nil {
 			for _, o := range m.Options {
+				// TODO: this is written loosely, with no guarantee of correctness; it will be revised later
 				switch o {
 				case "bind":
 					flags |= syscall.MS_BIND
@@ -98,7 +99,7 @@ func Mount(container Container, config specs.Spec) {
 		log.Fatalf("copy %s failed: %v", config.Root.Path, err)
 	}
 
-	// mount("none", "/", NULL, MS_REC | MS_PRIVATE, NULL);
+	// mount as private
 	if err := syscall.Mount("none", "/", "", syscall.MS_REC|syscall.MS_PRIVATE, ""); err != nil {
 		log.Fatalf("mount none failed: %v", err)
 	}
