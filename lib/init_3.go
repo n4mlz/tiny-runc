@@ -7,18 +7,22 @@ import (
 	"path/filepath"
 )
 
-func Init_3(containerID string, bundlePath string) {
-	if bundlePath == "" {
-		bundlePath = "."
+func Init_3(containerID string) {
+	container, err := LoadContainer(containerID)
+	if err != nil {
+		log.Fatalf("failed to load container: %v", err)
 	}
 
-	c := ParseConfig(filepath.Join(bundlePath, "config.json"))
+	config, err := ParseConfig(filepath.Join(container.State.Bundle, "config.json"))
+	if err != nil {
+		log.Fatalf("failed to parse config: %v", err)
+	}
 
-	Uts(c)
+	Uts(config)
 
-	cmd := exec.Command(c.Process.Args[0], c.Process.Args[1:]...)
-	cmd.Env = c.Process.Env
-	cmd.Dir = c.Process.Cwd
+	cmd := exec.Command(config.Process.Args[0], config.Process.Args[1:]...)
+	cmd.Env = config.Process.Env
+	cmd.Dir = config.Process.Cwd
 
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout

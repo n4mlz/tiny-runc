@@ -8,17 +8,21 @@ import (
 	"syscall"
 )
 
-func Init_2(containerID string, bundlePath string) {
-	if bundlePath == "" {
-		bundlePath = "."
+func Init_2(containerID string) {
+	container, err := LoadContainer(containerID)
+	if err != nil {
+		log.Fatalf("failed to load container: %v", err)
 	}
 
-	c := ParseConfig(filepath.Join(bundlePath, "config.json"))
+	config, err := ParseConfig(filepath.Join(container.State.Bundle, "config.json"))
+	if err != nil {
+		log.Fatalf("failed to parse config: %v", err)
+	}
 
-	cmd := exec.Command("/proc/self/exe", "init", "3", containerID, "--bundle", bundlePath)
+	cmd := exec.Command("/proc/self/exe", "init", "3", container.State.ID)
 
 	var cloneFlags uintptr
-	for _, ns := range c.Linux.Namespaces {
+	for _, ns := range config.Linux.Namespaces {
 		if ns.Type == "pid" {
 			cloneFlags |= syscall.CLONE_NEWPID
 		}

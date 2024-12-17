@@ -7,12 +7,12 @@ import (
 	"syscall"
 )
 
-func Init_1(containerID, bundlePath string, pipeFromParent string, pipeToParent string) {
-	if bundlePath == "" {
-		bundlePath = "."
+func Init_1(containerID, pipeFromParent string, pipeToParent string) {
+	container, err := LoadContainer(containerID)
+	if err != nil {
+		fmt.Println("Error loading container:", err)
+		return
 	}
-
-	// c := ParseConfig(filepath.Join(bundlePath, "config.json"))
 
 	handler, err := OpenPipesB(pipeFromParent, pipeToParent)
 	if err != nil {
@@ -36,7 +36,7 @@ func Init_1(containerID, bundlePath string, pipeFromParent string, pipeToParent 
 	syscall.Setuid(0)
 	syscall.Setgid(0)
 
-	cmd := exec.Command("/proc/self/exe", "init", "2", containerID, "--bundle", bundlePath)
+	cmd := exec.Command("/proc/self/exe", "init", "2", container.State.ID)
 
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout

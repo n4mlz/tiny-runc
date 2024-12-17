@@ -2,23 +2,21 @@ package lib
 
 import (
 	"encoding/json"
-	"log"
 	"os"
 
 	"github.com/opencontainers/runtime-spec/specs-go"
 )
 
-func ParseConfig(path string) specs.Spec {
-	file, err := os.Open(path)
+func ParseConfig(path string) (specs.Spec, error) {
+	file, err := os.ReadFile(path)
 	if err != nil {
-		log.Fatalf("failed to open file: %v", err)
+		return specs.Spec{}, err
 	}
-	defer file.Close()
 
 	var config specs.Spec
-	if err := json.NewDecoder(file).Decode(&config); err != nil {
-		log.Fatalf("failed to decode file: %v", err)
+	if err := json.Unmarshal(file, &config); err != nil {
+		return specs.Spec{}, err
 	}
 
-	return config
+	return config, nil
 }

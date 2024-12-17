@@ -13,7 +13,17 @@ func Create(containerID string, bundlePath string) {
 		bundlePath = "."
 	}
 
-	c := ParseConfig(filepath.Join(bundlePath, "config.json"))
+	container, err := NewContainer(containerID, bundlePath)
+	if err != nil {
+		fmt.Println("Error creating container:", err)
+		return
+	}
+
+	config, err := ParseConfig(filepath.Join(container.State.Bundle, "config.json"))
+	if err != nil {
+		fmt.Println("Error parsing config:", err)
+		return
+	}
 
 	// TODO: properly manage pipe path
 	pipeToChild := "tmp/parent_to_child"
@@ -25,10 +35,10 @@ func Create(containerID string, bundlePath string) {
 	}
 	defer CleanupPipes(pipeToChild, pipeFromChild)
 
-	cmd := exec.Command("/proc/self/exe", "init", "1", containerID, pipeToChild, pipeFromChild, "--bundle", bundlePath)
+	cmd := exec.Command("/proc/self/exe", "init", "1", container.State.ID, pipeToChild, pipeFromChild)
 
 	var cloneFlags uintptr
-	for _, ns := range c.Linux.Namespaces {
+	for _, ns := range config.Linux.Namespaces {
 		if ns.Type == "user" {
 			cloneFlags |= syscall.CLONE_NEWUSER
 		}
