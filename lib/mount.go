@@ -12,6 +12,7 @@ import (
 func mount_fs(container Container, config specs.Spec) {
 	for _, m := range config.Mounts {
 		flags := 0
+		data := ""
 		if m.Options != nil {
 			for _, o := range m.Options {
 				switch o {
@@ -63,8 +64,13 @@ func mount_fs(container Container, config specs.Spec) {
 					flags |= syscall.MS_SLAVE | syscall.MS_REC
 				case "rshared":
 					flags |= syscall.MS_SHARED | syscall.MS_REC
+
+				// TODO: add cgroup option
+				// TODO: add more options
+
 				default:
-					log.Printf("unknown mount option %s", o)
+					data += o + ","
+					// TODO: handle unknown options
 				}
 			}
 		}
