@@ -1,6 +1,8 @@
 # tiny-runc (WIP)
 
-> **追記**: このプロジェクトはアーカイブされ、開発が終了しました。現在は、同じ目標をかかげて Rust でリライトし、[tiny-youki](https://github.com/n4mlz/tiny-youki) というプロジェクトを開発しています。プロジェクトをアーカイブした理由については [こちら](https://gist.github.com/n4mlz/19533b78a2d83603b42fb30b65936ee0) を参照してください。
+<div style="border: 2px solid orange; padding: 15px; background-color: #fff3cd; color: #856404;">
+  <strong>追記:</strong> このプロジェクトはアーカイブされ、開発が終了しました。現在は、同じ目標をかかげて Rust でリライトし、<a href="https://github.com/n4mlz/tiny-youki">tiny-youki</a> というプロジェクトを開発しています。プロジェクトをアーカイブした理由については <a href="https://gist.github.com/n4mlz/19533b78a2d83603b42fb30b65936ee0">こちら</a> を参照してください。
+</div>
 
 低レベルコンテナランタイムである runc の簡易版です (WIP) 。
 
