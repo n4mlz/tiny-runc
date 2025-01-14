@@ -1,6 +1,7 @@
 # tiny-runc (WIP)
 
-> **追記**: このプロジェクトはアーカイブされ、開発が終了しました。現在は、同じ目標をかかげて Rust でリライトし、[tiny-youki](https://github.com/n4mlz/tiny-youki) というプロジェクトを開発しています。プロジェクトをアーカイブした理由については [こちら](https://gist.github.com/n4mlz/19533b78a2d83603b42fb30b65936ee0) を参照してください。
+> [!WARNING]
+このプロジェクトは開発を中止しました。現在は、同じ目標をかかげて Rust でリライトし、[tiny-youki](https://github.com/n4mlz/tiny-youki) というプロジェクトを開発しています。プロジェクトを停止した理由については [こちら](https://gist.github.com/n4mlz/19533b78a2d83603b42fb30b65936ee0) を参照してください。
 
 低レベルコンテナランタイムである runc の簡易版です (WIP) 。
 
